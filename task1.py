@@ -50,6 +50,8 @@ def update(task, task_id, data):
             task["title"] = data['title']
         if 'description' in data:
             task["description"] = data["description"]
+        if 'done' in data:
+            task["done"] = data["done"]
     return task
 
 
@@ -59,12 +61,11 @@ def update_todo(id):
     if not request.json:
         abort(500)
 
-    todo_id = request.json.get("id", None)
     title = request.json.get("title", None)
     desc = request.json.get("description", "")
 
-    if todo_id is None or title is None:
-         return jsonify(message="Invalid Request") , 500 
+    if title is None:
+        return jsonify(message="Invalid Request") , 500 
 
     global tasks
     tasks = [update(task, id, request.json) for task in tasks]
